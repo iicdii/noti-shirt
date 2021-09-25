@@ -1,0 +1,6 @@
+.next
+.cache
+.yarn
+build
+exports
+src
