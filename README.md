@@ -44,7 +44,8 @@ cd serverless
 yarn install
 ```
 
-2. Copy `.env.example` to `.env` and fill it
+2. Copy `.env.example` to `.env` and fill it.
+
 Note that `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are necessary for
 deploying serverless.
 
