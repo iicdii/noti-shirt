@@ -4,7 +4,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "postinstall": "cd .. && husky install frontend/.husky && cp -a frontend/.husky/. .git/hooks/",
+    "postinstall": "cd .. && husky install frontend/.husky",
     "lint": "eslint *.js",
     "format": "prettier --single-quote --write '*.js'"
   },
