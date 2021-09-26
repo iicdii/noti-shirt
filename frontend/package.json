@@ -4,7 +4,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "postinstall": "cd .. && husky install frontend/.husky"
+    "postinstall": "cd .. && husky install frontend/.husky && cp -a frontend/.husky/. .git/hooks/",
+    "lint": "eslint *.js",
+    "format": "prettier --single-quote --write '*.js'"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -33,7 +35,8 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write"
+      "eslint",
+      "prettier --single-quote --write"
     ],
     "*.css": [
       "stylefmt --recursive"

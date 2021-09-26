@@ -12,55 +12,64 @@ No T-shirt? get a NOTI of the shirt.
 
 ## Getting started
 ### Notion
-1. Create an integration
+#### 1. Create an integration
 
 Referring [here](https://developers.notion.com/docs/getting-started#step-1-create-an-integration), create an interaction.
 
-2. Create `Products` Database
+#### 2. Create `Products` Database
 
-| Column Name |   Type  |
-|:-----------:|:-------:|
-| id          | Title   |
-| name        | Text    |
-| sold_out    | Boolean |
-| new         | Boolean |
-| created_at  | Date    |
+| Column Name         | Type    |
+|:-------------------:|:-------:|
+| id                  | Text    |
+| name                | Title   |
+| front_brand_no      | Text    |
+| category_large_code | Text    |
+| sold_out            | Boolean |
+| new                 | Boolean |
 
-3. Create `Subscribers` Database
+#### 3. Create `Subscribers` Database
 
-| Column Name |  Type |
+| Column Name | Type  |
 |:-----------:|:-----:|
 | chat_id     | Title |
-| created_at  | Date  |
 
-4. Share database with integration
+#### 4. Create `Subscribe` Database
+
+| Column Name   | Type         |
+|:-------------:|:------------:|
+| id            | Title        |
+| chat_id       | Text         |
+| shop          | Select       |
+| target        | Multi Select |
+
+#### 5. Share databases with integration
 
 Refer to [here](https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration) and share the databases you created with the integration you created.
 
 ### Serverless
-1. Install packages
+#### 1. Install packages
 ```sh
 cd serverless
 yarn install
 ```
 
-2. Copy `.env.example` to `.env` and fill it.
+#### 2. Copy `.env.example` to `.env` and fill it.
 
 Note that `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are necessary for
 deploying serverless.
 
-3. Test core function
+#### 3. Test core function
 ```sh
 sls invoke local --function core
 ```
 
-4. Deploy
+#### 4. Deploy
 ```sh
 sls deploy --stage production
 ```
 
 ### Front-end
-1. Start dev mode
+#### 1. Start dev mode
 ```sh
 cd frontend
 yarn dev

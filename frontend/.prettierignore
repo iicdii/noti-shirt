@@ -4,3 +4,5 @@
 build
 exports
 src
+node_modules
+coverage
