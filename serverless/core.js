@@ -94,7 +94,7 @@ module.exports = async (event, context) => {
 
     let subscribers = [];
     try {
-      [subscribers] = await subscribeHelper.find({
+      const result = await subscribeHelper.find({
         and: [
           {
             property: 'shop',
@@ -109,7 +109,8 @@ module.exports = async (event, context) => {
             }
           }))
         ]
-      })
+      });
+      subscribers = subscribers.concat(result);
     } catch (e) {
       console.log('failed to fetch subscribers');
       console.log('e', e);
@@ -117,10 +118,10 @@ module.exports = async (event, context) => {
     }
 
     // 신상품 알림 +
-    if (newProducts.length) {
+    if (newProducts.length || (subscribers || []).length) {
       const text = '<b>[신상품]</b>\n' + newProducts.map(n => n.name).join('\n');
       telegramPromises.push(
-        ...(subscribers || []).map(({ chatId }) =>
+        ...subscribers.map(({ chatId }) =>
           axios.post(
             `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
             { chat_id: chatId, text, parse_mode: 'html' }
@@ -130,10 +131,10 @@ module.exports = async (event, context) => {
     }
 
     // 재입고 알림 +
-    if (productsInStock.length) {
+    if (productsInStock.length || (subscribers || []).length) {
       const text = '<b>[재입고]</b>\n' + productsInStock.map(n => n.name).join('\n');
       telegramPromises.push(
-        ...(subscribers || []).map(({ chatId }) =>
+        ...subscribers.map(({ chatId }) =>
           axios.post(
             `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
             { chat_id: chatId, text, parse_mode: 'html' }
@@ -144,12 +145,14 @@ module.exports = async (event, context) => {
   }
 
   // 구독자들에게 알림 보내기
-  try {
-    await Promise.all([...telegramPromises]);
-  } catch (e) {
-    console.log('send telegram message failed');
-    console.log('e', e);
-    throw e;
+  if (telegramPromises.length) {
+    try {
+      await Promise.all([...telegramPromises]);
+    } catch (e) {
+      console.log('send telegram message failed');
+      console.log('e', e);
+      throw e;
+    }
   }
 
   return { message: '실행 완료 🚀', event };
