@@ -120,7 +120,7 @@ module.exports = async (event, context) => {
     if (newProducts.length) {
       const text = '<b>[신상품]</b>\n' + newProducts.map(n => n.name).join('\n');
       telegramPromises.push(
-        ...subscribers.map(({ chatId }) =>
+        ...(subscribers || []).map(({ chatId }) =>
           axios.post(
             `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
             { chat_id: chatId, text, parse_mode: 'html' }
@@ -133,7 +133,7 @@ module.exports = async (event, context) => {
     if (productsInStock.length) {
       const text = '<b>[재입고]</b>\n' + productsInStock.map(n => n.name).join('\n');
       telegramPromises.push(
-        ...subscribers.map(({ chatId }) =>
+        ...(subscribers || []).map(({ chatId }) =>
           axios.post(
             `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
             { chat_id: chatId, text, parse_mode: 'html' }
