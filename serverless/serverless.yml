@@ -64,6 +64,12 @@ provider:
 functions:
   core:
     handler: handler.core
+    environment:
+      NOTION_KEY: ${env:NOTION_KEY}
+      NOTION_PRODUCTS_DATABASE_ID: ${env:NOTION_PRODUCTS_DATABASE_ID}
+      NOTION_SUBSCRIBERS_DATABASE_ID: ${env:NOTION_SUBSCRIBERS_DATABASE_ID}
+      NOTION_SUBSCRIBE_DATABASE_ID: ${env:NOTION_SUBSCRIBE_DATABASE_ID}
+      TELEGRAM_BOT_TOKEN: ${env:TELEGRAM_BOT_TOKEN}
     events:
       - schedule:
           rate: rate(3 hours)
