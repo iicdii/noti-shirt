@@ -58,12 +58,29 @@ yarn install
 Note that `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are necessary for
 deploying serverless.
 
-#### 3. Test core function
+#### 3. Define AWS profile named `noti-shirt` generally located in `~/.aws/credentials`
+
+**Example**
+```
+[default]
+aws_access_key_id=
+aws_secret_access_key=
+region=ap-northeast-1
+
+[noti-shirt]
+aws_access_key_id=
+aws_secret_access_key=
+region=ap-northeast-2
+```
+
+Now you don't have to switch AWS profile between projects using `aws configure` every time.
+
+#### 4. Test core function
 ```sh
 sls invoke local --function core
 ```
 
-#### 4. Deploy
+#### 5. Deploy
 ```sh
 sls deploy --stage production
 ```
