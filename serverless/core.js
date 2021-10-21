@@ -17,6 +17,9 @@ module.exports = async (event, context) => {
   const subscribeHelper = useSubscribe();
 
   const telegramPromises = [];
+  const newProductList = [];
+  const productsInStockList = [];
+
   for (let info of targetProducts) {
     let notionProducts = [], shopProducts = [];
     const createPromises = [], updatePromises = [];
@@ -92,7 +95,7 @@ module.exports = async (event, context) => {
       throw e;
     }
 
-    let subscribers = [];
+    const subscribers = [];
     try {
       const result = await subscribeHelper.find({
         and: [
@@ -110,7 +113,7 @@ module.exports = async (event, context) => {
           }))
         ]
       });
-      subscribers = subscribers.concat(result);
+      subscribers.push(...(result || []));
     } catch (e) {
       console.log('failed to fetch subscribers');
       console.log('e', e);
@@ -118,8 +121,12 @@ module.exports = async (event, context) => {
     }
 
     // 신상품 알림 +
-    if (newProducts.length || (subscribers || []).length) {
-      const text = '<b>[신상품]</b>\n' + newProducts.map(n => n.name).join('\n');
+    const newProductNames = newProducts.reduce((acc, cur) =>
+      cur.name ? acc.concat(cur.name) : acc
+    , []);
+    if (newProductNames.length && (subscribers || []).length) {
+      newProductList.push(...newProductNames);
+      const text = '<b>[신상품]</b>\n' + newProductNames.join('\n');
       telegramPromises.push(
         ...subscribers.map(({ chatId }) =>
           axios.post(
@@ -131,8 +138,12 @@ module.exports = async (event, context) => {
     }
 
     // 재입고 알림 +
-    if (productsInStock.length || (subscribers || []).length) {
-      const text = '<b>[재입고]</b>\n' + productsInStock.map(n => n.name).join('\n');
+    const productsInStockNames = productsInStock.reduce((acc, cur) =>
+      cur.name ? acc.concat(cur.name) : acc
+    , []);
+    if (productsInStockNames.length && (subscribers || []).length) {
+      productsInStockList.push(...productsInStockNames);
+      const text = '<b>[재입고]</b>\n' + productsInStockNames.join('\n');
       telegramPromises.push(
         ...subscribers.map(({ chatId }) =>
           axios.post(
@@ -155,5 +166,10 @@ module.exports = async (event, context) => {
     }
   }
 
-  return { message: '실행 완료 🚀', event };
+  return {
+    message: '실행 완료 🚀',
+    event,
+    newProductList,
+    productsInStockList,
+  };
 }
