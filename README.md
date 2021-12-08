@@ -14,7 +14,7 @@ No T-shirt? get a NOTI of the shirt.
 ### Notion
 #### 1. Create an integration
 
-Referring [here](https://developers.notion.com/docs/getting-started#step-1-create-an-integration), create an interaction.
+Referring [here](https://developers.notion.com/docs/getting-started#step-1-create-an-integration), create an integration.
 
 #### 2. Create `Products` Database
 
